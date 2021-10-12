@@ -6,18 +6,43 @@ using UnityEngine.SceneManagement;
 
 public class CollisionScript : MonoBehaviour
 {
-    public Text coinText;
-    public int coin;
+    public Text coinText, timerText;
+    public int coins;
+
+    public float timeLeft;
+    public int timeRemaining;
+
+    private float timerValue;
 
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        timeLeft -= Time.deltaTime;
+
+        timeRemaining = Mathf.FloorToInt(timeLeft % 60);
+
+        if (timeRemaining <= 0)
+        {
+            timeRemaining = 0;
+        }
+
+        timerText.text = "Timer : " + timeRemaining.ToString();
+
+        if (coins >= 60)
+        {
+            if (timeLeft <= timerValue)
+            {
+                SceneManager.LoadScene("GameWinScene");
+            }
+        }
+        else if (timeLeft <= 0)
+        {
+            SceneManager.LoadScene("GameLoseScene");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,8 +51,8 @@ public class CollisionScript : MonoBehaviour
         {
             Destroy(other.gameObject);
 
-            coin += 10;
-            coinText.text = $"Coin : {coin}";
+            coins += 10;
+            coinText.text = $"Coin : {coins}";
         }
 
         if (other.gameObject.tag == "Water")
