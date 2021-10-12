@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class CollisionScript : MonoBehaviour
 {
+    public GameObject coinParticleSys;
+
     public Text coinText, timerText;
     public int coins;
 
@@ -49,6 +51,7 @@ public class CollisionScript : MonoBehaviour
     {
         if (other.gameObject.tag == "Coin")
         {
+            Instantiate(coinParticleSys, other.gameObject.transform.position, Quaternion.identity);
             Destroy(other.gameObject);
 
             coins += 10;
